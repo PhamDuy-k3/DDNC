@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appbansach.Adapter.CartItemAdapter;
 import com.example.appbansach.modle.CartItem;
 import com.example.appbansach.modle.Invoice;
 import com.example.appbansach.modle.InvoiceGenerator;
@@ -25,11 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InvoiceActivity extends AppCompatActivity {
-    private TextView customerNameView;
-    private TextView timeIssuedView;
-    private TextView totalAmountView;
-    private RecyclerView cartItemsView;
-    private CartItemAdapter cartItemAdapter;
     private DatabaseReference databaseReference;
 
     private List<CartItem> cartItems;
@@ -38,11 +32,6 @@ public class InvoiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoice);
-
-        customerNameView = findViewById(R.id.customerNameView);
-        timeIssuedView = findViewById(R.id.timeIssuedView);
-        totalAmountView = findViewById(R.id.totalAmountView);
-        cartItemsView = findViewById(R.id.cartItemsView);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("carts");
 
@@ -77,11 +66,6 @@ public class InvoiceActivity extends AppCompatActivity {
                 if (cartItems.isEmpty()) {
                     Toast.makeText(InvoiceActivity.this, "Không tìm thấy sản phẩm cho khách hàng " + customerName, Toast.LENGTH_SHORT).show();
                 } else {
-                    // Hiển thị thông tin giỏ hàng
-                    cartItemAdapter = new CartItemAdapter(cartItems);
-                    cartItemsView.setLayoutManager(new LinearLayoutManager(InvoiceActivity.this));
-                    cartItemsView.setAdapter(cartItemAdapter);
-                    // Tạo và hiển thị hóa đơn ngay lập tức
                     createInvoiceAndDisplay(customerName);
                 }
             }
@@ -96,14 +80,6 @@ public class InvoiceActivity extends AppCompatActivity {
     private void createInvoiceAndDisplay(String customerName) {
         InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
         Invoice invoice = invoiceGenerator.createInvoice(customerName, cartItems);
-
-        customerNameView.setText(invoice.getCustomerName());
-        timeIssuedView.setText(invoice.getTimeIssued());
-        totalAmountView.setText(String.format("%.2f", invoice.getTotalAmount()));
-
-        cartItemAdapter = new CartItemAdapter(invoice.getCartItems());
-        cartItemsView.setLayoutManager(new LinearLayoutManager(this));
-        cartItemsView.setAdapter(cartItemAdapter);
 
         saveInvoiceToFirebase(invoice, customerName);
         deleteCartItems(customerName);
