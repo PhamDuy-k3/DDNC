@@ -38,7 +38,7 @@ public class ListBookActivity extends AppCompatActivity {
     private TextView addBook;
 
     private ImageView list;
-    private String accountType;
+    private String role;
     private DatabaseReference mDatabase;
     private Toolbar mToolbar;
 
@@ -54,8 +54,9 @@ public class ListBookActivity extends AppCompatActivity {
         //Nhận dữ liệu trạng thái của tài khoản là user/admin
         Intent intent = getIntent();
         String accountType = intent.getStringExtra("role");
+        role =accountType;
         String username = intent.getStringExtra("username");
-        name =username;
+        name = username;
         //Toast.makeText(this, "check" + accountType, Toast.LENGTH_SHORT).show();
 
         //toolbar
@@ -154,7 +155,7 @@ public class ListBookActivity extends AppCompatActivity {
     // Tìm kiếm sách theo tên
     private void filterBooks(String query) {
         filteredBookList.clear();
-        if (!TextUtils.isEmpty(query)) {
+        if (!TextUtils.isEmpty(query)) { //TextUtils là 1 tiện ích làm vc với chuôi
             for (Book book : bookList) {
                 if (book.getTenSach().toLowerCase().contains(query.toLowerCase())) {
                     filteredBookList.add(book);
@@ -169,9 +170,15 @@ public class ListBookActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Intent intent = new Intent(ListBookActivity.this, MainActivityUser.class);
+            Intent intent;
+            if ("admin".equals(role)) {
+                intent = new Intent(ListBookActivity.this, MainActivityAdmin.class);
+            } else {
+                intent = new Intent(ListBookActivity.this, MainActivityUser.class);
+            }
             intent.putExtra("username", name);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clear activity stack
+            intent.putExtra("role", role);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             return true;
         }

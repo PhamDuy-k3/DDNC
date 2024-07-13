@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Determine user role and redirect accordingly
                     if ("admin".equals(account.getRole())) {
                         Intent intent = new Intent(LoginActivity.this, MainActivityAdmin.class);
+                        intent.putExtra("username", username);
                         intent.putExtra("role", role);
                         startActivity(intent);
                     }  else {

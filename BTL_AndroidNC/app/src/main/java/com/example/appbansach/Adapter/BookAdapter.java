@@ -63,7 +63,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             list = itemView.findViewById(R.id.list);
 
             itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
+                int position = getAdapterPosition();//lấy vị trí của mục hiện tại trong danh sách.
                 if (position != RecyclerView.NO_POSITION && mListener != null) {
                     mListener.onItemClick(bookList.get(position));
                 }
@@ -103,6 +103,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.txtPrice.setText(formattedDonGia);
 
       //  Toast.makeText(mContext, "Account Type in Adapter: " + accountType, Toast.LENGTH_SHORT).show();
+
         // Kiểm tra loại tài khoản và thiết lập visibility cho Button
         if ("admin".equals(accountType)) {
             holder.list.setVisibility(View.VISIBLE);

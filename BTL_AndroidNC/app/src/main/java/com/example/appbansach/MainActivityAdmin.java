@@ -26,6 +26,7 @@ public class MainActivityAdmin extends AppCompatActivity {
         //Nhận dữ liệu trạng thái của tài khoản là user/admin
         Intent intent = getIntent();
         String accountType = intent.getStringExtra("role");
+        String username = getIntent().getStringExtra("username");
         //Toast.makeText(this, "check" + accountType, Toast.LENGTH_SHORT).show();
 
         category = findViewById(R.id.Category);
@@ -44,6 +45,7 @@ public class MainActivityAdmin extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivityAdmin.this, ListBookActivity.class);
                 intent.putExtra("role", accountType);
+                intent.putExtra("username", username);
                 startActivity(intent);
             }
         });

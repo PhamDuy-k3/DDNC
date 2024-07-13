@@ -134,7 +134,7 @@ public class addBookActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {//Được gọi khi có lỗi xảy ra hoặc khi quá trình truy vấn bị hủy.
                 Toast.makeText(addBookActivity.this, "Kiểm tra mã sách thất bại: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -151,12 +151,13 @@ public class addBookActivity extends AppCompatActivity {
                     genreList.add(genre);
                 }
 
+                //builder là 1 đối tượng tạo dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(addBookActivity.this);
                 builder.setTitle("Chọn thể loại");
 
-                String[] genresArray = genreList.toArray(new String[0]);
+                String[] genresArray = genreList.toArray(new String[0]);// chuyển danh sách thành mảng
                 builder.setItems(genresArray, (dialog, which) -> {
-                    String selectedGenre = genresArray[which];
+                    String selectedGenre = genresArray[which];//which : chỉ số index
                     EditText.setText(selectedGenre);
                 });
 
