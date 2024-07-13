@@ -1,4 +1,5 @@
 package com.example.appbansach;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +29,6 @@ import java.util.List;
 
 import androidx.appcompat.widget.Toolbar;
 
-
 public class ListBookActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -38,7 +38,7 @@ public class ListBookActivity extends AppCompatActivity {
     private TextView addBook;
 
     private ImageView list;
-    private String role;
+    private String accountType;
     private DatabaseReference mDatabase;
     private Toolbar mToolbar;
 
@@ -53,8 +53,7 @@ public class ListBookActivity extends AppCompatActivity {
 
         //Nhận dữ liệu trạng thái của tài khoản là user/admin
         Intent intent = getIntent();
-        String accountType = intent.getStringExtra("role");
-        role =accountType;
+        accountType = intent.getStringExtra("role");
         String username = intent.getStringExtra("username");
         name = username;
         //Toast.makeText(this, "check" + accountType, Toast.LENGTH_SHORT).show();
@@ -71,7 +70,6 @@ public class ListBookActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         addBook = findViewById(R.id.addBook);
         SearchView searchView = findViewById(R.id.search_view);
-
 
         cartbook = findViewById(R.id.imgcartbook);
         if ("admin".equals(accountType)) {
@@ -124,8 +122,8 @@ public class ListBookActivity extends AppCompatActivity {
                 startActivity(intent1);
             }
         });
-
     }
+
     // Lấy danh sách sách trong firebase
     private void fetchBooksFromFirebase() {
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -152,10 +150,11 @@ public class ListBookActivity extends AppCompatActivity {
             }
         });
     }
+
     // Tìm kiếm sách theo tên
     private void filterBooks(String query) {
         filteredBookList.clear();
-        if (!TextUtils.isEmpty(query)) { //TextUtils là 1 tiện ích làm vc với chuôi
+        if (!TextUtils.isEmpty(query)) {
             for (Book book : bookList) {
                 if (book.getTenSach().toLowerCase().contains(query.toLowerCase())) {
                     filteredBookList.add(book);
@@ -166,19 +165,20 @@ public class ListBookActivity extends AppCompatActivity {
         }
         adapter.notifyDataSetChanged();
     }
-    //quay lai
 
+    //quay lai
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             Intent intent;
-            if ("admin".equals(role)) {
+            if ("admin".equals(accountType)) {
                 intent = new Intent(ListBookActivity.this, MainActivityAdmin.class);
             } else {
                 intent = new Intent(ListBookActivity.this, MainActivityUser.class);
             }
             intent.putExtra("username", name);
-            intent.putExtra("role", role);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("role",accountType);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clear activity stack
             startActivity(intent);
             return true;
         }

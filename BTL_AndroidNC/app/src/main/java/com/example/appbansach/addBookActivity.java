@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.appbansach.modle.Book;
+import com.example.appbansach.modle.Category;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -140,25 +142,32 @@ public class addBookActivity extends AppCompatActivity {
         });
     }
 
-
-    public void showGenreDialog(EditText EditText) {
+    public void showGenreDialog(EditText editText) {
         mDatabase.child("categories").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 genreList.clear();
                 for (DataSnapshot genreSnapshot : dataSnapshot.getChildren()) {
-                    String genre = genreSnapshot.getValue(String.class);
-                    genreList.add(genre);
+                    // Lấy đối tượng Category từ DataSnapshot
+                    Category category = genreSnapshot.getValue(Category.class);
+                    if (category != null) {
+                        // Thêm tên thể loại vào danh sách
+                        genreList.add(category.getName());
+                    } else {
+                        // In ra log nếu đối tượng Category là null
+                        Log.e("showGenreDialog", "Category is null");
+                    }
                 }
 
-                //builder là 1 đối tượng tạo dialog
+                // Tạo đối tượng tạo dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(addBookActivity.this);
                 builder.setTitle("Chọn thể loại");
 
-                String[] genresArray = genreList.toArray(new String[0]);// chuyển danh sách thành mảng
+                // Chuyển danh sách thành mảng
+                String[] genresArray = genreList.toArray(new String[0]);
                 builder.setItems(genresArray, (dialog, which) -> {
-                    String selectedGenre = genresArray[which];//which : chỉ số index
-                    EditText.setText(selectedGenre);
+                    String selectedGenre = genresArray[which]; // which: chỉ số index
+                    editText.setText(selectedGenre);
                 });
 
                 AlertDialog dialog = builder.create();
@@ -183,6 +192,7 @@ public class addBookActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     private void showAlertDialog(String title, String message) {
         new AlertDialog.Builder(addBookActivity.this)
                 .setTitle(title)

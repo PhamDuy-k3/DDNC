@@ -33,6 +33,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private ImageView btnAddCart;
     private TextView BuyBook;
     private String tenSach;
+    private String accountType;
     private Double giaSach;
     private String name;
 
@@ -44,7 +45,7 @@ public class BookDetailActivity extends AppCompatActivity {
         BuyBook = findViewById(R.id.tvBuyBooK);
 
         Intent intent = getIntent();
-        String accountType = intent.getStringExtra("role");
+        accountType = intent.getStringExtra("role");
         if ("admin".equals(accountType)) {
             btnAddCart.setVisibility(View.GONE);
             BuyBook.setVisibility(View.GONE);
@@ -167,6 +168,7 @@ public class BookDetailActivity extends AppCompatActivity {
                                 Toast.makeText(BookDetailActivity.this, "Cập nhật số lượng sách thành công", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(BookDetailActivity.this, CartsActivity.class);
                                 intent.putExtra("username", name);
+                                intent.putExtra("role",accountType);
                                 startActivity(intent);
                             })
                             .addOnFailureListener(e -> {
@@ -181,6 +183,7 @@ public class BookDetailActivity extends AppCompatActivity {
                                 Toast.makeText(BookDetailActivity.this, "Thêm sách vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(BookDetailActivity.this, CartsActivity.class);
                                 intent.putExtra("username", name);
+                                intent.putExtra("role",accountType);
                                 startActivity(intent);
                             })
                             .addOnFailureListener(e -> {

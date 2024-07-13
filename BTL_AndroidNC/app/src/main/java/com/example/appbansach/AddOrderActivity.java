@@ -40,6 +40,7 @@ public class AddOrderActivity extends AppCompatActivity {
     private ListView listViewOrder;
     private CartAdapter cartAdapter;
     private DatabaseReference mDatabase, uDatabase, databaseReference;
+    private String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class AddOrderActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String username = intent.getStringExtra("username");
-        String role = intent.getStringExtra("role");
+        role = intent.getStringExtra("role");
         String bookId = intent.getStringExtra("book_id");
 
         // Khởi tạo Firebase
@@ -82,6 +83,7 @@ public class AddOrderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AddOrderActivity.this, InvoiceActivity.class);
                 intent.putExtra("username", username);
+                intent.putExtra("role",role);
                 startActivity(intent);
             }
         });

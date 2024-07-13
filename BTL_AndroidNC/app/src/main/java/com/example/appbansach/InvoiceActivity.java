@@ -3,13 +3,10 @@ package com.example.appbansach;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appbansach.modle.CartItem;
 import com.example.appbansach.modle.Invoice;
@@ -25,20 +22,24 @@ import java.util.List;
 
 public class InvoiceActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
-
     private List<CartItem> cartItems;
+    private String username;
+    private String accountType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoice);
 
+        // Lấy dữ liệu từ Intent
+        Intent intent = getIntent();
+        username = intent.getStringExtra("username");
+        accountType = intent.getStringExtra("role");
+
         databaseReference = FirebaseDatabase.getInstance().getReference("carts");
 
         cartItems = new ArrayList<>();
 
-        Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
         if (username != null) {
             fetchCartItemsFromFirebase(username);
         } else {
@@ -86,6 +87,7 @@ public class InvoiceActivity extends AppCompatActivity {
 
         Intent intent = new Intent(InvoiceActivity.this, ListBookActivity.class);
         intent.putExtra("username", customerName);
+        intent.putExtra("role", accountType);
         startActivity(intent);
     }
 

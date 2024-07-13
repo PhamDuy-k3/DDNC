@@ -32,6 +32,7 @@ public class CartsActivity extends AppCompatActivity {
     private String name;
     private Toolbar mlToolbarCart;
     private Button btnThanhToan;
+    private String accountType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class CartsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String username = intent.getStringExtra("username");
+        accountType = intent.getStringExtra("role");
         Toast.makeText(CartsActivity.this, "" + username, Toast.LENGTH_SHORT).show();
 
         TextView totalPriceTextView = findViewById(R.id.tvTotal);
@@ -64,6 +66,7 @@ public class CartsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(CartsActivity.this, AddOrderActivity.class);
                 intent.putExtra("username", name);
+                intent.putExtra("role",accountType);
                 startActivity(intent);
             }
         });
